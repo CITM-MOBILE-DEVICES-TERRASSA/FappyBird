@@ -8,9 +8,13 @@ public class FlyBehavior : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] private float _velocity = 1.5f;
     [SerializeField] private float _rotationSpeed = 10f;
-
+    AudioManager audioManager;
     private Rigidbody2D _rb;
-
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+    
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -20,6 +24,7 @@ public class FlyBehavior : MonoBehaviour
     {
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
+            audioManager.PlaySFX(audioManager.fly);
             _rb.velocity= Vector2.up*_velocity;
         }
     }
@@ -31,8 +36,9 @@ public class FlyBehavior : MonoBehaviour
     
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        audioManager.PlaySFX(audioManager.hit);
+        audioManager.PlaySFX(audioManager.die);
         GameManager.instance.GameOver();
-
     }
 
 }
